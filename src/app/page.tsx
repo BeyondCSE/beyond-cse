@@ -1,4 +1,5 @@
 "use client";
+import { Suspense } from "react";
 export const dynamic = "force-dynamic";
 
 import { useEffect, useState, useRef } from "react";
@@ -34,8 +35,14 @@ import {
 } from "firebase/firestore";
 
 export default function Home() {
-
-  const router = useRouter();
+  return (
+    <Suspense fallback={<div className="text-white">Loading...</div>}>
+      <HomeContent />
+    </Suspense>
+  );
+}
+function HomeContent() {
+const router = useRouter();
 
   // ✅ ALL STATES FIRST
   const [isOpen, setIsOpen] = useState(false);
@@ -1067,6 +1074,6 @@ hover:drop-shadow-[0_0_30px_#00f0ff] transition">
       </div>
 
       <AuthModal isOpen={isOpen} onClose={() => setIsOpen(false)} mode={mode} />
-    </main>
+        </main>
   );
 }
