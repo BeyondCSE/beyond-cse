@@ -1,5 +1,5 @@
 "use client";
-
+export const dynamic = "force-dynamic";
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { Orbitron } from "next/font/google";
@@ -64,9 +64,11 @@ export default function Home() {
       setMode("login");
     }
 
-    const url = new URL(window.location.href);
-    url.searchParams.delete("auth");
-    window.history.replaceState({}, "", url.pathname);
+    if (typeof window !== "undefined") {
+  const url = new URL(window.location.href);
+  url.searchParams.delete("auth");
+  window.history.replaceState({}, "", url.pathname);
+}
 
   }, [authMode, user]);
   
