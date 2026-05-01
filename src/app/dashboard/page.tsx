@@ -99,62 +99,69 @@ router.push("/");
 const handleSaveProfile = async () => {
   if (!user) return;
 
-  let updatedUsername = username;
-  let updatedUsernameKey = null;
+  try {
+    console.log("SAVE CLICKED");
 
-  // 🔥 USERNAME FIXED LOGIC
-  if (newUsername && newUsername !== username) {
-    const clean = newUsername.toLowerCase().replace(/\s+/g, "");
+    const cleanNew = newUsername.trim();
+    const cleanOld = username?.trim();
 
-    const userRef = doc(db, "users", user.uid);
-    const usernameRef = doc(db, "usernames", clean);
+    let finalUsername = username;
+    let finalUsernameKey = null;
 
-    const userSnap = await getDoc(userRef);
-    const oldUsernameKey = userSnap.exists()
-      ? userSnap.data().usernameKey
-      : null;
+    // 🔥 HANDLE USERNAME CHANGE
+    if (cleanNew && cleanNew !== cleanOld) {
+      const cleanKey = cleanNew.toLowerCase().replace(/\s+/g, "");
 
-    const existing = await getDoc(usernameRef);
+      const usernameRef = doc(db, "usernames", cleanKey);
+      const existing = await getDoc(usernameRef);
 
-    if (existing.exists() && existing.data().uid !== user.uid) {
-      setUsernameError("Username already taken ❌");
-      return;
+      if (existing.exists() && existing.data().uid !== user.uid) {
+        setUsernameError("Username already taken ❌");
+        return;
+      }
+
+      // delete old username key
+      if (cleanOld) {
+        const oldKey = cleanOld.toLowerCase().replace(/\s+/g, "");
+        await deleteDoc(doc(db, "usernames", oldKey));
+      }
+
+      // save new username key
+      await setDoc(usernameRef, { uid: user.uid });
+
+      finalUsername = cleanNew;
+      finalUsernameKey = cleanKey;
     }
 
-    // 🔥 DELETE OLD USERNAME
-    if (oldUsernameKey && oldUsernameKey !== clean) {
-      await deleteDoc(doc(db, "usernames", oldUsernameKey));
-    }
+    // 🔥 HANDLE BIO
+    const finalBio = isEditingBio ? newBio : bio;
 
-    // 🔥 SAVE NEW USERNAME
-    await setDoc(usernameRef, {
-      uid: user.uid,
-    });
+    // 🔥 SAVE TO FIRESTORE (ALWAYS RUNS)
+    await setDoc(
+      doc(db, "users", user.uid),
+      {
+        username: finalUsername,
+        usernameKey: finalUsernameKey,
+        bio: finalBio,
+      },
+      { merge: true }
+    );
 
-    updatedUsername = newUsername;
-    updatedUsernameKey = clean;
+    console.log("SAVED SUCCESSFULLY");
+
+    // 🔥 UPDATE UI
+    setUsername(finalUsername);
+    setBio(finalBio);
+
+    setIsEditingName(false);
+    setIsEditingBio(false);
+    setNewUsername("");
+    setNewBio("");
+    setUsernameError("");
+
+  } catch (err) {
+    console.error("SAVE ERROR:", err);
   }
-
-  // 🔥 SAVE PROFILE DATA
-  await setDoc(
-    doc(db, "users", user.uid),
-    {
-      username: updatedUsername,
-      usernameKey: updatedUsernameKey || undefined,
-      bio: newBio !== "" ? newBio : bio,
-    },
-    { merge: true }
-  );
-
-  // 🔥 UPDATE UI
-  setUsername(updatedUsername);
-  setBio(newBio || bio);
-
-  setUsernameError("");
-  setIsEditingName(false);
-  setIsEditingBio(false);
-  setNewUsername("");
-setNewBio("");
 };
 const addTask = async () => {
   if (!taskInput.trim() || !user) return;
