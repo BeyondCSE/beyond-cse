@@ -141,7 +141,7 @@ const handleSaveProfile = async () => {
     {
       username: updatedUsername,
       usernameKey: updatedUsernameKey || undefined,
-      bio: newBio || bio,
+      bio: newBio !== "" ? newBio : bio,
     },
     { merge: true }
   );
@@ -153,6 +153,8 @@ const handleSaveProfile = async () => {
   setUsernameError("");
   setIsEditingName(false);
   setIsEditingBio(false);
+  setNewUsername("");
+setNewBio("");
 };
 const addTask = async () => {
   if (!taskInput.trim() || !user) return;
@@ -891,7 +893,12 @@ backdrop-blur-md md:backdrop-blur-0">
     )}
   </div>
 
-  <button onClick={() => setIsEditingName(!isEditingName)}>
+  <button
+  onClick={() => {
+    setIsEditingName(true);
+    setNewUsername(username || "");
+  }}
+>
     ✏️
   </button>
 </div>
@@ -913,9 +920,14 @@ backdrop-blur-md md:backdrop-blur-0">
     )}
   </div>
 
-  <button onClick={() => setIsEditingBio(!isEditingBio)}>
-    ✏️
-  </button>
+  <button
+  onClick={() => {
+    setIsEditingBio(true);
+    setNewBio(bio || "");
+  }}
+>
+  ✏️
+</button>
 </div>
 
       {/* EMAIL */}
