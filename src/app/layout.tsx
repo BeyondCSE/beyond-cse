@@ -12,16 +12,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// ✅ Using faviconn.ico (as you requested)
 export const metadata: Metadata = {
   title: "Beyond CSE",
   description: "Beyond CSE - Learn, Build, Grow",
   icons: {
-    icon: "/faviconn.ico",
-    shortcut: "/faviconn.ico",
-    apple: "/apple-touch-icon.png",
+    icon: "/myicon.ico",
   },
-  manifest: "/site.webmanifest",
 };
 
 export default function RootLayout({
@@ -31,9 +27,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="h-full antialiased">
-      <body
-        className={`min-h-full flex flex-col ${geistSans.variable} ${geistMono.variable}`}
-      >
+      <body className={`min-h-full flex flex-col ${geistSans.variable} ${geistMono.variable}`}>
         {children}
       </body>
     </html>
