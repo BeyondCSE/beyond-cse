@@ -12,11 +12,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata = {
+// ✅ Metadata (Next.js)
+export const metadata: Metadata = {
   title: "Beyond CSE",
   description: "Beyond CSE - Learn, Build, Grow",
   icons: {
     icon: "/myicon.ico",
+    shortcut: "/myicon.ico",
     apple: "/apple-touch-icon.png",
   },
   manifest: "/site.webmanifest",
@@ -29,7 +31,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="h-full antialiased">
-      <body className={`min-h-full flex flex-col ${geistSans.variable} ${geistMono.variable}`}>
+      <head>
+        {/* 🔥 Manual fallback (important for mobile) */}
+        <link rel="icon" href="/myicon.ico" />
+        <link rel="shortcut icon" href="/myicon.ico" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+      </head>
+
+      <body
+        className={`min-h-full flex flex-col ${geistSans.variable} ${geistMono.variable}`}
+      >
         {children}
       </body>
     </html>
