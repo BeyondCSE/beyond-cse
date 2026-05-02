@@ -1,23 +1,19 @@
 {
   "name": "Beyond CSE",
-  "short_name": "Beyond CSE",
-  "description": "Beyond CSE - Learn, Build, Grow",
-  "start_url": "/",
-  "scope": "/",
-  "display": "standalone",
-  "background_color": "#0a0a0a",
-  "theme_color": "#0a0a0a",
-  "orientation": "portrait",
+  "short_name": "BeyondCSE",
   "icons": [
     {
-      "src": "/android-chrome-192x192.png",
+      "src": "/icon.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/android-chrome-512x512.png",
+      "src": "/icon.png",
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "display": "standalone"
 }
