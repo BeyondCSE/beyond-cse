@@ -12,16 +12,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// ✅ FINAL METADATA (FORCED NEW ICON)
 export const metadata: Metadata = {
   title: "Beyond CSE",
   description: "Beyond CSE - Learn, Build, Grow",
-  icons: {
-    icon: "/myicon-final.ico",
-    shortcut: "/myicon-final.ico",
-    apple: "/apple-touch-icon.png",
-  },
-  manifest: "/site.webmanifest",
 };
 
 export default function RootLayout({
@@ -31,18 +24,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="h-full antialiased">
-      
-      {/* 🔥 Manual fallback for all browsers */}
-      <head>
-        <link rel="icon" href="/myicon-final.ico" />
-        <link rel="shortcut icon" href="/myicon-final.ico" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <link rel="manifest" href="/site.webmanifest" />
-      </head>
-
-      <body
-        className={`min-h-full flex flex-col ${geistSans.variable} ${geistMono.variable}`}
-      >
+      <body className={`min-h-full flex flex-col ${geistSans.variable} ${geistMono.variable}`}>
         {children}
       </body>
     </html>
