@@ -15,17 +15,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Beyond CSE",
   description: "Beyond CSE - Learn, Build, Grow",
-
-  // 🔥 Mobile / Android support
   manifest: "/site.webmanifest",
 
-  // 🔥 Explicit favicon (since NOT using favicon.ico)
   icons: {
-    icon: [
-      { url: "/myicon-final.ico" }, // main
-    ],
-    shortcut: ["/myicon-final.ico"],
-    apple: ["/apple-touch-icon.png"],
+    icon: "/myicon-final.ico",   // 👈 your custom icon
   },
 };
 
@@ -37,16 +30,14 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full antialiased">
       <head>
-        {/* 🔥 Force all browsers to use your icon */}
+        {/* 👇 browser fallback system */}
         <link rel="icon" href="/myicon-final.ico" />
-        <link rel="shortcut icon" href="/myicon-final.ico" />
+        <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
       </head>
 
-      <body
-        className={`min-h-full flex flex-col ${geistSans.variable} ${geistMono.variable}`}
-      >
+      <body className={`min-h-full flex flex-col ${geistSans.variable} ${geistMono.variable}`}>
         {children}
       </body>
     </html>
