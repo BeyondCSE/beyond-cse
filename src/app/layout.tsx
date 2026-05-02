@@ -15,6 +15,14 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Beyond CSE",
   description: "Beyond CSE - Learn, Build, Grow",
+
+  // 🔥 IMPORTANT FOR MOBILE + TABLET
+  manifest: "/site.webmanifest",
+
+  // 🔥 OPTIONAL BUT GOOD PRACTICE
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
