@@ -12,12 +12,14 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "Beyond CSE",
   description: "Beyond CSE - Learn, Build, Grow",
   icons: {
     icon: "/myicon.ico",
+    apple: "/apple-touch-icon.png",
   },
+  manifest: "/site.webmanifest",
 };
 
 export default function RootLayout({
