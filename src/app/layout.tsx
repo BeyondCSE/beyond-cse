@@ -16,12 +16,16 @@ export const metadata: Metadata = {
   title: "Beyond CSE",
   description: "Beyond CSE - Learn, Build, Grow",
 
-  // 🔥 IMPORTANT FOR MOBILE + TABLET
+  // 🔥 Mobile / Android support
   manifest: "/site.webmanifest",
 
-  // 🔥 OPTIONAL BUT GOOD PRACTICE
+  // 🔥 Explicit favicon (since NOT using favicon.ico)
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/myicon-final.ico" }, // main
+    ],
+    shortcut: ["/myicon-final.ico"],
+    apple: ["/apple-touch-icon.png"],
   },
 };
 
@@ -32,6 +36,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="h-full antialiased">
+      <head>
+        {/* 🔥 Force all browsers to use your icon */}
+        <link rel="icon" href="/myicon-final.ico" />
+        <link rel="shortcut icon" href="/myicon-final.ico" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+      </head>
+
       <body
         className={`min-h-full flex flex-col ${geistSans.variable} ${geistMono.variable}`}
       >
