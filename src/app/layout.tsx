@@ -12,17 +12,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// ✅ FULL FIXED METADATA
+// ✅ Using faviconn.ico (as you requested)
 export const metadata: Metadata = {
   title: "Beyond CSE",
   description: "Beyond CSE - Learn, Build, Grow",
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-    ],
-    shortcut: "/favicon.ico",
+    icon: "/faviconn.ico",
+    shortcut: "/faviconn.ico",
     apple: "/apple-touch-icon.png",
   },
   manifest: "/site.webmanifest",
