@@ -699,23 +699,7 @@ hover:drop-shadow-[0_0_30px_#00f0ff] transition">
     <FaLinkedin className="text-xl text-[#00f0ff]" />
   </a>
 
-  {/* 👤 CO-FOUNDER */}
-  <a
-    href="https://www.linkedin.com/in/aryan-maharana-8b082b384?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="flex items-center justify-between p-3 rounded-lg 
-    bg-[#111]/60 border border-[#00f0ff]/10
-    hover:border-[#00f0ff] hover:shadow-[0_0_20px_#00f0ff]/20
-    transition"
-  >
-    <div>
-      <p className="text-white font-medium">Aryan Maharana</p>
-      <p className="text-gray-400 text-sm">Co-Founder, Beyond CSE</p>
-    </div>
-
-    <FaLinkedin className="text-xl text-[#00f0ff]" />
-  </a>
+  
 
 </div>
 
