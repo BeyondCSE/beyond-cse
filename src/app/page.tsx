@@ -812,16 +812,7 @@ hover:drop-shadow-[0_0_30px_#00f0ff] transition">
     </p>
   </div>
 
-  {/* RIGHT - CO-FOUNDER */}
-  <div className="text-right flex-1">
-    <p className="text-[#00f0ff] font-semibold text-lg
-      hover:drop-shadow-[0_0_15px_#00f0ff] transition">
-      Aryan Maharana
-    </p>
-    <p className="text-gray-400 text-sm">
-      Co-Founder, Beyond CSE
-    </p>
-  </div>
+  
 
 </div>
 
