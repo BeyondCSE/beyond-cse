@@ -91,8 +91,8 @@ const router = useRouter();
   const [messages, setMessages] = useState<any[]>([]);
   const [displayText, setDisplayText] = useState("");
   const ADMIN_UIDS = [
-  "9xLGzmKruUTNZGx1FMYZJciKbvO2",
-  "VqJDvfC1Qge7sdDRQHbbY5mZCcG2"
+  "9xLGzmKruUTNZGx1FMYZJciKbvO2"
+  
 ];
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const [dashboardMode, setDashboardMode] = useState(false);
