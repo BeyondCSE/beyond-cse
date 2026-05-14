@@ -30,6 +30,7 @@ const [newBio, setNewBio] = useState("");
 const [usernameError, setUsernameError] = useState("");
 const router = useRouter();
 const [tasks, setTasks] = useState<any[]>([]);
+const [todoTab, setTodoTab] = useState("daily");
 const [taskInput, setTaskInput] = useState("");
 const [streak, setStreak] = useState(0);
 const [lastCompletedDate, setLastCompletedDate] = useState("");
@@ -87,6 +88,11 @@ useEffect(() => {
 
   return () => unsubscribe();
 }, [user]);
+useEffect(() => {
+  if (!user || tasks.length === 0) return;
+
+  cleanupDailyTasks();
+}, [user, tasks]);
 
 const handleLogout = async () => {
 await signOut(auth);
@@ -167,11 +173,12 @@ const addTask = async () => {
   if (!taskInput.trim() || !user) return;
 
   const newTask = {
-    text: taskInput,
-    completed: false,
-    uid: user.uid,
-    createdAt: serverTimestamp(),
-  };
+  text: taskInput,
+  completed: false,
+  uid: user.uid,
+  type: "daily",
+  createdAt: serverTimestamp(),
+};
   
 
   await addDoc(collection(db, "todos"), newTask);
@@ -238,6 +245,64 @@ const yesterdayStr = formatDate(yesterday);
 const deleteTask = async (id: string) => {
   await deleteDoc(doc(db, "todos", id));
 };
+const cleanupDailyTasks = async () => {
+  if (!user) return;
+
+  try {
+    const today = new Date().toLocaleDateString("en-CA");
+
+    const userRef = doc(db, "users", user.uid);
+
+    const userSnap = await getDoc(userRef);
+
+    if (!userSnap.exists()) return;
+
+    const lastCleanup =
+      userSnap.data().lastTodoCleanup || "";
+
+    // already cleaned today
+    if (lastCleanup === today) return;
+
+    // 🔥 get only daily tasks
+    const dailyTasks = tasks.filter(
+      (task) => task.type === "daily"
+    );
+
+    for (const task of dailyTasks) {
+
+      // ✅ completed task → delete
+      if (task.completed) {
+
+        await deleteDoc(doc(db, "todos", task.id));
+
+      }
+
+      // ❌ incomplete task → move
+      else {
+
+        await updateDoc(doc(db, "todos", task.id), {
+          type: "incomplete",
+        });
+
+      }
+    }
+
+    // save cleanup date
+    await updateDoc(userRef, {
+      lastTodoCleanup: today,
+    });
+
+  } catch (err) {
+    console.error(err);
+  }
+};
+const dailyTasks = tasks.filter(
+  (task) => task.type === "daily"
+);
+
+const incompleteTasks = tasks.filter(
+  (task) => task.type === "incomplete"
+);
 const totalTasks = tasks.length;
 const completedTasks = tasks.filter(t => t.completed).length;
 const percentage = totalTasks === 0
@@ -661,45 +726,121 @@ backdrop-blur-md md:backdrop-blur-0">
 </button>
     </div>
 
-    {/* EMPTY STATE */}
-    {tasks.length === 0 ? (
-  <div className="text-center text-gray-500 mt-10">
-    No tasks yet. Start by adding one 🚀
+
+    {/* 🔥 DYNAMIC ISLAND TAB SWITCHER */}
+<div className="flex justify-center mb-6">
+
+  <div className="relative flex items-center bg-[#0f0f0f]/80
+  border border-[#00f0ff]/20 rounded-full p-1
+  backdrop-blur-xl shadow-[0_0_25px_rgba(0,240,255,0.12)]">
+
+    {/* ACTIVE TAB GLOW */}
+    <div
+      className={`absolute top-1 bottom-1 w-[48%] rounded-full
+      bg-[#00f0ff]/10 border border-[#00f0ff]/30
+      shadow-[0_0_20px_rgba(0,240,255,0.4)]
+      transition-all duration-300
+      ${todoTab === "daily"
+        ? "left-1"
+        : "left-1/2"}`}
+    />
+
+    {/* DAILY TAB */}
+    <button
+      onClick={() => setTodoTab("daily")}
+      className={`relative z-10 px-4 py-2 md:px-8 md:py-3
+      rounded-full text-sm md:text-base transition-all duration-300
+      ${todoTab === "daily"
+        ? "text-[#00f0ff]"
+        : "text-gray-400 hover:text-white"}`}
+    >
+      Daily Todo ({dailyTasks.length})
+    </button>
+
+    {/* INCOMPLETE TAB */}
+    <button
+      onClick={() => setTodoTab("incomplete")}
+      className={`relative z-10 px-4 py-2 md:px-8 md:py-3
+      rounded-full text-sm md:text-base transition-all duration-300
+      ${todoTab === "incomplete"
+        ? "text-[#00f0ff]"
+        : "text-gray-400 hover:text-white"}`}
+    >
+      Incomplete ({incompleteTasks.length})
+    </button>
+
   </div>
+</div>
+
+
+{/* 🔥 TASK DISPLAY */}
+{(todoTab === "daily"
+  ? dailyTasks
+  : incompleteTasks
+).length === 0 ? (
+
+  <div className="text-center text-gray-500 mt-10">
+    {todoTab === "daily"
+      ? "No daily tasks yet 🚀"
+      : "No incomplete tasks 🎉"}
+  </div>
+
 ) : (
+
   <div className="space-y-3">
-    {tasks.map((task) => (
+
+    {(todoTab === "daily"
+      ? dailyTasks
+      : incompleteTasks
+    ).map((task) => (
+
       <div
         key={task.id}
-        className="flex items-center justify-between bg-[#111] p-3 rounded-lg border border-[#00f0ff]/10 hover:border-[#00f0ff]/30 transition"
+        className="group flex items-center justify-between
+        bg-[#111]/80 p-3 md:p-4 rounded-2xl
+        border border-[#00f0ff]/10
+        hover:border-[#00f0ff]/40
+        hover:shadow-[0_0_25px_rgba(0,240,255,0.15)]
+        transition-all duration-300"
       >
+
+        {/* TASK TEXT */}
         <span
-  className={`transition ${
-    task.completed
-      ? "line-through text-gray-500 opacity-60"
-      : "text-gray-300"
-  }`}
->
-  {task.text}
-</span>
+          className={`transition text-sm md:text-base ${
+            task.completed
+              ? "line-through text-gray-500 opacity-60"
+              : "text-gray-200"
+          }`}
+        >
+          {task.text}
+        </span>
 
-        <div className="flex gap-2">
-            <input
-  type="checkbox"
-  checked={task.completed}
-  onChange={() => toggleTask(task.id, task.completed)}
-  className="w-4 h-4 accent-[#00f0ff] cursor-pointer scale-110 hover:scale-125 transition"
-/>
+        {/* ACTIONS */}
+        <div className="flex items-center gap-3">
 
+          {/* COMPLETE */}
+          <input
+            type="checkbox"
+            checked={task.completed}
+            onChange={() => toggleTask(task.id, task.completed)}
+            className="w-4 h-4 accent-[#00f0ff]
+            cursor-pointer scale-110"
+          />
+
+          {/* DELETE */}
           <button
             onClick={() => deleteTask(task.id)}
-            className="text-sm text-red-400"
+            className="text-red-400 text-sm
+            hover:text-red-300 transition"
           >
             ✖
           </button>
+
         </div>
+
       </div>
     ))}
+
   </div>
 )}
 
