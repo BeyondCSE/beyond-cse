@@ -694,10 +694,13 @@ return ( <div className="flex flex-col md:flex-row min-h-screen bg-[#0a0a0a] tex
 
     
     <div className="w-full max-w-md mx-auto md:max-w-none
-rounded-2xl md:rounded-none p-4 md:p-0
-bg-[#0a0a0a]/60 md:bg-transparent
-border border-[#00f0ff]/10 md:border-none
-backdrop-blur-md md:backdrop-blur-0">
+rounded-3xl p-4 md:p-8
+bg-gradient-to-br from-[#0a0a0a]/90 to-[#0f0f0f]/70
+border border-[#00f0ff]/20
+backdrop-blur-2xl
+shadow-[0_0_40px_rgba(0,240,255,0.12)]
+hover:shadow-[0_0_70px_rgba(0,240,255,0.2)]
+transition-all duration-500">
 
   {/* ✅ MOVED HERE */}
   <h2 className="text-2xl md:text-3xl text-[#00f0ff] mb-5 md:mb-6 text-center md:text-left">
