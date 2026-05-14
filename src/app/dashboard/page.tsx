@@ -410,25 +410,34 @@ return ( <div className="flex flex-col md:flex-row min-h-screen bg-[#0a0a0a] tex
         <nav className="flex flex-col gap-4 text-sm">
 
           <span
-            onClick={() => setActiveTab("home")}
-            className="cursor-pointer hover:text-[#00f0ff] active:scale-95 transition duration-150"
-          >
-            Dashboard
-          </span>
+  onClick={() => {
+    setActiveTab("home");
+    setSidebarOpen(false);
+  }}
+  className="cursor-pointer hover:text-[#00f0ff] active:scale-95 transition duration-150"
+>
+  Dashboard
+</span>
 
           <span
-            onClick={() => setActiveTab("courses")}
-            className="cursor-pointer hover:text-[#00f0ff] active:scale-95 transition duration-150"
-          >
-            Courses
-          </span>
+  onClick={() => {
+    setActiveTab("courses");
+    setSidebarOpen(false);
+  }}
+  className="cursor-pointer hover:text-[#00f0ff] active:scale-95 transition duration-150"
+>
+  Courses
+</span>
 
           <span
-            onClick={() => setActiveTab("profile")}
-            className="cursor-pointer hover:text-[#00f0ff] active:scale-95 transition duration-150"
-          >
-            Profile
-          </span>
+  onClick={() => {
+    setActiveTab("profile");
+    setSidebarOpen(false);
+  }}
+  className="cursor-pointer hover:text-[#00f0ff] active:scale-95 transition duration-150"
+>
+  Profile
+</span>
           <span
   onClick={() => {
     setActiveTab("progress");
