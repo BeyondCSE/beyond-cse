@@ -782,8 +782,8 @@ transition-all duration-500">
 
   <div className="text-center text-gray-500 mt-10">
     {todoTab === "daily"
-      ? "No daily tasks yet 🚀"
-      : "No incomplete tasks 🎉"}
+      ? "Systems ready. Awaiting your next move"
+      : "Backlog status: clear"}
   </div>
 
 ) : (
