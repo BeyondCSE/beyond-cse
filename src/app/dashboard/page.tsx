@@ -377,6 +377,15 @@ const getStreakMilestone = () => {
 };
 
 const milestone = getStreakMilestone();
+const hour = new Date().getHours();
+
+let greeting = "Good Evening";
+
+if (hour < 12) {
+  greeting = "Good Morning";
+} else if (hour < 18) {
+  greeting = "Good Afternoon";
+}
 
 return ( <div className="flex flex-col md:flex-row min-h-screen bg-[#0a0a0a] text-white">
 
@@ -622,7 +631,7 @@ return ( <div className="flex flex-col md:flex-row min-h-screen bg-[#0a0a0a] tex
           </button>
 
           <h2 className="text-3xl text-[#00f0ff]">
-            Welcome, {username || user?.email || "User"}
+            {greeting}, {username || user?.email || "User"}
           </h2>
         </div>
 
@@ -639,7 +648,7 @@ return ( <div className="flex flex-col md:flex-row min-h-screen bg-[#0a0a0a] tex
       {activeTab === "home" && (
         <>
           <p className="text-gray-400 mb-6">
-            Your journey to go Beyond begins here 🚀
+            Your journey to go Beyond begins here 
           </p>
           <h3 className="text-xl md:text-2xl text-[#00f0ff] mb-4">
   Quick Picks
