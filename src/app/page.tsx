@@ -93,6 +93,8 @@ const router = useRouter();
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState<any[]>([]);
   const [displayText, setDisplayText] = useState("");
+  const [editingMessageId, setEditingMessageId] = useState("");
+const [editedText, setEditedText] = useState("");
   const ADMIN_UIDS = [
   "9xLGzmKruUTNZGx1FMYZJciKbvO2"
   
@@ -326,6 +328,21 @@ const reactToMessage = async (
         ? arrayRemove(user.uid)
         : arrayUnion(user.uid),
     });
+  } catch (err) {
+    console.error(err);
+  }
+};
+const saveEditedMessage = async (messageId: string) => {
+  if (!editedText.trim()) return;
+
+  try {
+    await updateDoc(doc(db, "messages", messageId), {
+      text: editedText,
+      edited: true,
+    });
+
+    setEditingMessageId("");
+    setEditedText("");
   } catch (err) {
     console.error(err);
   }
@@ -989,23 +1006,89 @@ shadow-[0_0_10px_rgba(255,0,0,0.3)] hover:shadow-[0_0_20px_rgba(255,0,0,0.6)]"
       </p>
 
       <div className="flex items-start justify-between gap-3">
-  <p className="text-gray-300 break-words">
-    {msg.text}
-  </p>
 
-  {(user?.uid === msg.uid || ADMIN_UIDS.includes(user?.uid || "")) && (
-    <button
-      onClick={async () => {
-        try {
-          await deleteDoc(doc(db, "messages", msg.id));
-        } catch (err) {
-          console.error(err);
-        }
-      }}
-      className="text-red-400 text-xs hover:text-red-300 transition"
-    >
-      Delete
-    </button>
+  {/* MESSAGE CONTENT */}
+  <div className="flex-1">
+
+    {editingMessageId === msg.id ? (
+      <div className="flex flex-col gap-2">
+
+        <input
+          value={editedText}
+          onChange={(e) => setEditedText(e.target.value)}
+          className="bg-black border border-[#00f0ff]/20 rounded px-3 py-2 text-white"
+        />
+
+        <div className="flex gap-2">
+          <button
+            onClick={() => saveEditedMessage(msg.id)}
+            className="text-xs text-[#00f0ff]"
+          >
+            Save
+          </button>
+
+          <button
+            onClick={() => {
+              setEditingMessageId("");
+              setEditedText("");
+            }}
+            className="text-xs text-gray-400"
+          >
+            Cancel
+          </button>
+        </div>
+
+      </div>
+    ) : (
+      <>
+        <p className="text-gray-300 break-words">
+          {msg.text}
+        </p>
+
+        {msg.edited && (
+          <p className="text-xs text-gray-500 mt-1">
+            edited
+          </p>
+        )}
+      </>
+    )}
+
+  </div>
+
+  {/* ACTIONS */}
+  {(user?.uid === msg.uid ||
+    ADMIN_UIDS.includes(user?.uid || "")) && (
+
+    <div className="flex gap-2">
+
+      {/* EDIT */}
+      {user?.uid === msg.uid && (
+        <button
+          onClick={() => {
+            setEditingMessageId(msg.id);
+            setEditedText(msg.text);
+          }}
+          className="text-blue-400 text-xs hover:text-blue-300 transition"
+        >
+          Edit
+        </button>
+      )}
+
+      {/* DELETE */}
+      <button
+        onClick={async () => {
+          try {
+            await deleteDoc(doc(db, "messages", msg.id));
+          } catch (err) {
+            console.error(err);
+          }
+        }}
+        className="text-red-400 text-xs hover:text-red-300 transition"
+      >
+        Delete
+      </button>
+
+    </div>
   )}
 </div>
 <div className="flex gap-2 mt-2 flex-wrap">
