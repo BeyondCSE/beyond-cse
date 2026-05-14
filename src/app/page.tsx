@@ -31,6 +31,9 @@ import {
   limit,
   where,
   getDocs,
+  updateDoc,
+arrayUnion,
+arrayRemove,
   deleteDoc
 } from "firebase/firestore";
 
@@ -303,6 +306,29 @@ const getTimeLeft = (expireAt: any) => {
   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
 
   return `${hours}h ${minutes}m`;
+};
+const reactToMessage = async (
+  messageId: string,
+  emoji: string,
+  reactions: any = {}
+) => {
+  if (!user) return;
+
+  const messageRef = doc(db, "messages", messageId);
+
+  const usersReacted = reactions?.[emoji] || [];
+
+  const alreadyReacted = usersReacted.includes(user.uid);
+
+  try {
+    await updateDoc(messageRef, {
+      [`reactions.${emoji}`]: alreadyReacted
+        ? arrayRemove(user.uid)
+        : arrayUnion(user.uid),
+    });
+  } catch (err) {
+    console.error(err);
+  }
 };
 
   return (
@@ -981,6 +1007,29 @@ shadow-[0_0_10px_rgba(255,0,0,0.3)] hover:shadow-[0_0_20px_rgba(255,0,0,0.6)]"
       Delete
     </button>
   )}
+</div>
+<div className="flex gap-2 mt-2 flex-wrap">
+  {["❤️", "🔥", "😂", "👍"].map((emoji) => {
+    const count = msg.reactions?.[emoji]?.length || 0;
+    const reacted = msg.reactions?.[emoji]?.includes(user?.uid);
+
+    return (
+      <button
+        key={emoji}
+        onClick={() =>
+          reactToMessage(msg.id, emoji, msg.reactions)
+        }
+        className={`px-2 py-1 rounded-full text-sm border transition
+        ${
+          reacted
+            ? "bg-[#00f0ff]/20 border-[#00f0ff] text-[#00f0ff]"
+            : "border-white/10 text-gray-300 hover:border-[#00f0ff]/40"
+        }`}
+      >
+        {emoji} {count > 0 ? count : ""}
+      </button>
+    );
+  })}
 </div>
       <p className="text-xs text-gray-400 mt-1">
   Expires in {getTimeLeft(msg.expireAt)}
