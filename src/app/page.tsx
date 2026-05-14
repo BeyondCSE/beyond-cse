@@ -962,7 +962,26 @@ shadow-[0_0_10px_rgba(255,0,0,0.3)] hover:shadow-[0_0_20px_rgba(255,0,0,0.6)]"
         )}
       </p>
 
-      <p className="text-gray-300">{msg.text}</p>
+      <div className="flex items-start justify-between gap-3">
+  <p className="text-gray-300 break-words">
+    {msg.text}
+  </p>
+
+  {(user?.uid === msg.uid || ADMIN_UIDS.includes(user?.uid || "")) && (
+    <button
+      onClick={async () => {
+        try {
+          await deleteDoc(doc(db, "messages", msg.id));
+        } catch (err) {
+          console.error(err);
+        }
+      }}
+      className="text-red-400 text-xs hover:text-red-300 transition"
+    >
+      Delete
+    </button>
+  )}
+</div>
       <p className="text-xs text-gray-400 mt-1">
   Expires in {getTimeLeft(msg.expireAt)}
 </p>
