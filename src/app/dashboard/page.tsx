@@ -529,9 +529,7 @@ return ( <div className="flex flex-col md:flex-row min-h-screen bg-[#0a0a0a] tex
             Beyond CSE
           </h1>
 
-          <span onClick={() => setActiveTab("home")} className="cursor-pointer hover:text-[#00f0ff] active:scale-95 transition">
-  Dashboard
-</span>
+
 
 <span
   onClick={() => {
