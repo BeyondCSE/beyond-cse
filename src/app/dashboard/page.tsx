@@ -375,6 +375,40 @@ const getStreakMilestone = () => {
 
   return "Keep pushing forward 🚀";
 };
+useEffect(() => {
+  if (!user || !lastCompletedDate) return;
+
+  const today = new Date();
+
+  const yesterday = new Date();
+  yesterday.setDate(today.getDate() - 1);
+
+  const yesterdayStr = yesterday.toISOString().split("T")[0];
+
+  // 🔥 user missed a day
+  if (
+    lastCompletedDate !== yesterdayStr &&
+    lastCompletedDate !== today.toISOString().split("T")[0]
+  ) {
+
+    const resetStreak = async () => {
+      try {
+
+        await updateDoc(doc(db, "users", user.uid), {
+          streak: 0,
+        });
+
+        setStreak(0);
+
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    resetStreak();
+  }
+
+}, [user, lastCompletedDate]);
 
 const milestone = getStreakMilestone();
 const hour = new Date().getHours();
