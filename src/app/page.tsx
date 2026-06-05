@@ -212,7 +212,7 @@ useEffect(() => {
       expireAt: new Date(Date.now() + 6 * 60 * 60 * 1000),
     });
 
-    console.log("✅ SAVED TO FIRESTORE:", docRef.id);
+    
 
     setNewMessage("");
   } catch (error) {
